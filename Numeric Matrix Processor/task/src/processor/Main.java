@@ -8,16 +8,9 @@ public class Main {
     }
 
     public static void appinit() {
-        createMatrix();
         int[][] matrixA = createMatrix();
-        int[][] matrixB = createMatrix();
-
-        if (checkSize(matrixA, matrixB)) {
-            int[][] matrixC = sumMatrix(matrixA, matrixB);
-            displayMatrix(matrixC);
-        } else {
-            System.out.println("ERROR");
-        }
+        int[][] matrixB = multiplyMatrixByConstant(matrixA);
+        displayMatrix(matrixB);
     }
 
     public static int[][] createMatrix() {
@@ -34,7 +27,13 @@ public class Main {
     }
 
     public static int[][] multiplyMatrixByConstant(int[][] matrix) {
-
+        Scanner scanner = new Scanner(System.in);
+        int constant = scanner.nextInt();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j] = matrix[i][j] * constant;
+            }
+        }
         return matrix;
     }
 

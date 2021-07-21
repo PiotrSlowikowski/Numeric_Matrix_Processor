@@ -3,12 +3,16 @@ package processor;
 import java.util.Scanner;
 
 public class Main {
+
+    boolean areMatrixEqual = true;
+
     public static void main(String[] args) {
         appinit();
     }
 
     public static void appinit() {
         Scanner scanner = new Scanner(System.in);
+        Main main = new Main();
 
         while (true) {
             displayMenu();
@@ -18,131 +22,109 @@ public class Main {
                 break;
             }
             if (chosenAction.equals("1")) {
-                float[][] matrixC = sumMatrix();
+                double[][] matrixC = sumMatrix();
+                if (matrixC[0][0] == 0) {
+                    System.out.println("\nThe operation cannot be performed.");
+                    continue;
+                }
                 System.out.println("The result is:");
                 displayMatrix(matrixC);
             } else if (chosenAction.equals("2")) {
-                float[][] matrixC = multiplyMatrixByConstant();
+                double[][] matrixC = multiplyMatrixByConstant();
+                System.out.println("The result is:");
+                displayMatrix(matrixC);
+            } else if (chosenAction.equals("3")) {
+                double[][] matrixC = multiplyMatrixes();
+                if (main.areMatrixEqual == false) {
+                    System.out.println("The operation cannot be performed.");
+                    continue;
+                }
                 System.out.println("The result is:");
                 displayMatrix(matrixC);
             }
         }
     }
 
-    public static int[][] createMatrix(String order) {
+    public static double[][] createMatrix(String order) {
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter size of " + order + " matrix: ");
-        int rowsQuantity = scanner.nextInt();
-        int columnsQuantity = scanner.nextInt();
+        int row = scanner.nextInt();
+        int col = scanner.nextInt();
         System.out.println("Enter " + order + " matrix: ");
-        int[][] matrix = new int[rowsQuantity][columnsQuantity];
+        double[][] matrix = new double[row][col];
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
-                matrix[i][j] = scanner.nextInt();
+                matrix[i][j] = scanner.nextDouble();
             }
         }
         return matrix;
     }
 
-    public static float[][] sumMatrix() {
+    public static double[][] sumMatrix() {
+        Main main = new Main();
+        double[][] matrix1 = createMatrix("first");
+        double[][] matrix2 = createMatrix("second");
+        if (matrix1.length == matrix2.length && matrix1[0].length == matrix2[0].length) {
+            main.areMatrixEqual = true;
+        } else {
+            main.areMatrixEqual = false;
+            // KONIEC???
+        }
+        double[][] matrixesSum = new double[matrix1.length][matrix1[0].length];
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter size of first matrix: ");
-        int rowsQuantityA = scanner.nextInt();
-        int columnsQuantityA = scanner.nextInt();
-        System.out.println("Enter first matrix: ");
-        int[][] matrixA = new int[rowsQuantityA][columnsQuantityA];
-        for (int i = 0; i < matrixA.length; i++) {
-            for (int j = 0; j < matrixA[i].length; j++) {
-                matrixA[i][j] = scanner.nextInt();
+        if (main.areMatrixEqual == true) {
+            for (int i = 0; i < matrix1.length; i++) {
+                for (int j = 0; j < matrix1[0].length; j++) {
+                    matrixesSum[i][j] = matrix1[i][j] + matrix2[i][j];
+                }
             }
         }
-
-        System.out.print("Enter size of second matrix: ");
-        int rowsQuantityB = scanner.nextInt();
-        int columnsQuantityB = scanner.nextInt();
-        System.out.println("Enter second matrix: ");
-        int[][] matrixB = new int[rowsQuantityB][columnsQuantityB];
-        for (int i = 0; i < matrixB.length; i++) {
-            for (int j = 0; j < matrixB[i].length; j++) {
-                matrixB[i][j] = scanner.nextInt();
-            }
-        }
-
-        float[][] matrixC = new float[matrixA.length][matrixA[0].length];
-        for (int i = 0; i < matrixC.length; i++) {
-            for (int j = 0; j < matrixC[i].length; j++) {
-                matrixC[i][j] = matrixA[i][j] + matrixB[i][j];
-            }
-        }
-        return matrixC;
+        return matrixesSum;
     }
 
-    public static float[][] multiplyMatrixByConstant() {
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter size of matrix: ");
-        int rowsQuantity = scanner.nextInt();
-        int columnsQuantity = scanner.nextInt();
-        System.out.println("Enter matrix: ");
-        float[][] matrix = new float[rowsQuantity][columnsQuantity];
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                matrix[i][j] = scanner.nextFloat();
-            }
-        }
-        float[][] matrixMultipliedByConst = new float[matrix.length][matrix[0].length];
+    public static double[][] multiplyMatrixByConstant() {
+        Scanner scanner = new Scanner((System.in));
+        double[][] matrix = createMatrix("");
         System.out.print("Enter constant: ");
-        float constant = scanner.nextFloat();
-
+        double constant = scanner.nextDouble();
         for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                matrixMultipliedByConst[i][j] = matrix[i][j] * constant;
+            for (int j = 0; j < matrix[0].length; j++) {
+                matrix[i][j] = matrix[i][j] * constant;
             }
         }
-        return matrixMultipliedByConst;
+        return matrix;
     }
 
-    public static int[][] multiplyMatrixes() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter size of first matrix: ");
-        int rowsQuantityA = scanner.nextInt();
-        int columnsQuantityA = scanner.nextInt();
-        System.out.println("Enter first matrix: ");
-        int[][] matrixA = new int[rowsQuantityA][columnsQuantityA];
+    public static double[][] multiplyMatrixes() {
+        Main main = new Main();
+        double[][] matrixA = createMatrix("first");
+        double[][] matrixB = createMatrix("second");
+        if (checkSize(matrixA, matrixB) == false) {
+            main.areMatrixEqual = false;
+        } else {
+            main.areMatrixEqual = true;
+        }
+        double[][] matrixC = new double[matrixA.length][matrixB[0].length];
         for (int i = 0; i < matrixA.length; i++) {
-            for (int j = 0; j < matrixA[i].length; j++) {
-                matrixA[i][j] = scanner.nextInt();
-            }
-        }
-
-        System.out.print("Enter size of second matrix: ");
-        int rowsQuantityB = scanner.nextInt();
-        int columnsQuantityB = scanner.nextInt();
-        System.out.println("Enter second matrix: ");
-        int[][] matrixB = new int[rowsQuantityB][columnsQuantityB];
-        for (int i = 0; i < matrixB.length; i++) {
-            for (int j = 0; j < matrixB[i].length; j++) {
-                matrixB[i][j] = scanner.nextInt();
-            }
-        }
-
-        int[][] matrixC = new int[matrixA.length][matrixA[0].length];
-        for (int i = 0; i < matrixC.length; i++) {
-            for (int j = 0; j < matrixC[i].length; j++) {
-
+            for (int j = 0; j < matrixB[0].length; j++) {
+                for (int k = 0; k < matrixB.length; k++) {
+                    matrixC[i][j] += matrixA[i][k] * matrixB[k][j];
+                }
             }
         }
         return matrixC;
-
     }
 
-    public static boolean checkSize(int[][] matrixA, int[][] matrixB) {
-        return matrixA.length == matrixB.length && matrixA[0].length == matrixB[0].length;
+    public static boolean checkSize(double[][] matrixA, double[][] matrixB) {
+        if (matrixA[0].length != matrixB.length) {
+            return false;
+        }
+        return true;
     }
 
-    public static void displayMatrix(float[][] matrix) {
+    public static void displayMatrix(double[][] matrix) {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 System.out.print(matrix[i][j] + " ");
@@ -158,5 +140,4 @@ public class Main {
         System.out.println("3. Multiply matrices");
         System.out.println("0. Exit");
     }
-
 }

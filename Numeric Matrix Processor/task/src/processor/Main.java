@@ -41,6 +41,11 @@ public class Main {
                 }
                 System.out.println("The result is:");
                 displayMatrix(matrixC);
+            } else if (chosenAction.equals("4")) {
+                displayTransPositionMenu();
+                System.out.print("Your choice: ");
+                String transpositionType = scanner.next();
+
             }
         }
     }
@@ -138,6 +143,16 @@ public class Main {
         System.out.println("1. Add matrices");
         System.out.println("2. Multiply matrix by a constant");
         System.out.println("3. Multiply matrices");
+        System.out.println("4. Transpose Matrix");
         System.out.println("0. Exit");
     }
+
+    public static void displayTransPositionMenu() {
+        System.out.println("1. Main diagonal");
+        System.out.println("2. Side diagonal");
+        System.out.println("3. Vertical line");
+        System.out.println("4. Horizontal line");
+    }
+
+
 }

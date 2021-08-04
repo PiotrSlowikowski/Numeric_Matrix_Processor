@@ -56,8 +56,42 @@ public class Main {
                     double[][] horizontalLineTransposedMatrix = horizontalLineTransposition();
                     displayMatrix(horizontalLineTransposedMatrix);
                 }
+            } else if (chosenAction.equals("5")) {
+                double[][] arr = createMatrix("");
+                double result = calculateDeterminant(arr);
+                System.out.println("The result is:");
+                System.out.println(result + "\n");
             }
         }
+    }
+
+    public static double calculateDeterminant(double[][] arr) {
+
+        double result = 0;
+        if (arr.length == 1) {
+            result = arr[0][0];
+            return result;
+        }
+        if (arr.length == 2) {
+            result = arr[0][0] * arr[1][1] - arr[0][1] * arr[1][0];
+            return result;
+        }
+        for (int i = 0; i < arr[0].length; i++) {
+            double temp[][] = new double[arr.length - 1][arr[0].length - 1];
+
+            for (int j = 1; j < arr.length; j++) {
+                for (int k = 0; k < arr[0].length; k++) {
+
+                    if (k < i) {
+                        temp[j - 1][k] = arr[j][k];
+                    } else if (k > i) {
+                        temp[j - 1][k - 1] = arr[j][k];
+                    }
+                }
+            }
+            result += arr[0][i] * Math.pow(-1, (int) i) * calculateDeterminant(temp);
+        }
+        return result;
     }
 
     public static double[][] mainDiagonalTransposition() {
@@ -84,24 +118,24 @@ public class Main {
 
     public static double[][] verticalLineTransposition() {
         double[][] matrix = createMatrix("");
-        double[][] verticalArray = new double[matrix.length][matrix[0].length];
-        for (int i = 0; i < verticalArray.length; i++) {
-            for (int j = 0; j < verticalArray[i].length; j++) {
-                verticalArray[i][j] = matrix[i][matrix[i].length - 1 - j];
+        double[][] verticalarray = new double[matrix.length][matrix[0].length];
+        for (int i = 0; i < verticalarray.length; i++) {
+            for (int j = 0; j < verticalarray[i].length; j++) {
+                verticalarray[i][j] = matrix[i][matrix[i].length - 1 - j];
             }
         }
-        return verticalArray;
+        return verticalarray;
     }
 
     public static double[][] horizontalLineTransposition() {
         double[][] matrix = createMatrix("");
-        double[][] horizontalArray = new double[matrix.length][matrix[0].length];
-        for (int i = 0; i < horizontalArray.length; i++) {
-            for (int j = 0; j < horizontalArray[i].length; j++) {
-                horizontalArray[i][j] = matrix[matrix.length - 1 - i][j];
+        double[][] horizontalarray = new double[matrix.length][matrix[0].length];
+        for (int i = 0; i < horizontalarray.length; i++) {
+            for (int j = 0; j < horizontalarray[i].length; j++) {
+                horizontalarray[i][j] = matrix[matrix.length - 1 - i][j];
             }
         }
-        return horizontalArray;
+        return horizontalarray;
     }
 
     public static double[][] createMatrix(String order) {
@@ -118,6 +152,7 @@ public class Main {
         }
         return matrix;
     }
+
 
     public static double[][] sumMatrix() {
         Main main = new Main();
@@ -156,26 +191,26 @@ public class Main {
 
     public static double[][] multiplyMatrixes() {
         Main main = new Main();
-        double[][] matrixA = createMatrix("first");
+        double[][] arr = createMatrix("first");
         double[][] matrixB = createMatrix("second");
-        if (checkSize(matrixA, matrixB) == false) {
+        if (checkSize(arr, matrixB) == false) {
             main.areMatrixEqual = false;
         } else {
             main.areMatrixEqual = true;
         }
-        double[][] matrixC = new double[matrixA.length][matrixB[0].length];
-        for (int i = 0; i < matrixA.length; i++) {
+        double[][] matrixC = new double[arr.length][matrixB[0].length];
+        for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < matrixB[0].length; j++) {
                 for (int k = 0; k < matrixB.length; k++) {
-                    matrixC[i][j] += matrixA[i][k] * matrixB[k][j];
+                    matrixC[i][j] += arr[i][k] * matrixB[k][j];
                 }
             }
         }
         return matrixC;
     }
 
-    public static boolean checkSize(double[][] matrixA, double[][] matrixB) {
-        if (matrixA[0].length != matrixB.length) {
+    public static boolean checkSize(double[][] arr, double[][] matrixB) {
+        if (arr[0].length != matrixB.length) {
             return false;
         }
         return true;
@@ -197,6 +232,7 @@ public class Main {
         System.out.println("2. Multiply matrix by a constant");
         System.out.println("3. Multiply matrices");
         System.out.println("4. Transpose Matrix");
+        System.out.println("5. Calculate a determinant");
         System.out.println("0. Exit");
     }
 
